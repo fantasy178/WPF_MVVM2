@@ -10,18 +10,16 @@ namespace WPF_MVVM2
 {
     class ViewModel : ViewModelBase
     {
-        private ObservableCollection<Person> people = new ObservableCollection<Person>();
-        public ObservableCollection<Person> People
+        private List<Person> people_List;
+        public List<Person> People_List
         {
-            get { return people; }
-            set
-            {
-                if(people != value)
-                {
-                    people = value;
-                    OnPropertyChanged("People");
-                }
-            }
+            get { return people_List; }
+        }
+
+        private ObservableCollection<Person> people_Obs;
+        public ObservableCollection<Person> People_Obs
+        {
+            get { return people_Obs; }
         }
 
         public DelegateCommand UseListUpdateCmd { get; set; }
@@ -29,23 +27,53 @@ namespace WPF_MVVM2
 
         public ViewModel()
         {
+            UpdateList();
+            UpdateObs();
+
             UseListUpdateCmd = new DelegateCommand(OnUseListUpdateCmdExecuted, (o) => { return true; });
             UseObsUpdateCmd = new DelegateCommand(OnUseObsUpdateCmdExecuted, (o) => { return true; });
         }
 
         private void OnUseListUpdateCmdExecuted(object obj)
         {
-            List<Person> person = new List<Person>();
-            person.Add(new Person() { Name = "A", Age = 15 });
-            person.Add(new Person() { Name = "B", Age = 30 });
-            this.People = new ObservableCollection<Person>(person);
+            UpdateList();
         }
+
+        private int updateListCount = 0;
+        private void UpdateList()
+        {
+            //List<Person> people = new List<Person>();
+            //people.Add(new Person() { Name = "A", Age = updateListCount });
+            //people.Add(new Person() { Name = "B", Age = updateListCount });
+            //this.people_List = people;
+            //updateListCount++;
+
+            if (this.people_List == null) this.people_List = new List<Person>();
+            this.people_List.Add(new Person() { Name = "A", Age = updateListCount });
+            this.people_List.Add(new Person() { Name = "B", Age = updateListCount });
+            updateListCount++;
+        }
+
         private void OnUseObsUpdateCmdExecuted(object obj)
         {
-            ObservableCollection<Person> person = new ObservableCollection<Person>();
-            person.Add(new Person() { Name = "C", Age = 15 });
-            person.Add(new Person() { Name = "D", Age = 30 });
-            this.People = person;
+            UpdateObs();
+        }
+
+        private int updateObsCount = 0;
+        private void UpdateObs()
+        {
+            /*
+            ObservableCollection<Person> people = new ObservableCollection<Person>();
+            people.Add(new Person() { Name = "a", Age = updateObsCount });
+            people.Add(new Person() { Name = "b", Age = updateObsCount });
+            this.people_Obs = people;
+            updateObsCount++;
+            */
+
+            if (this.people_Obs == null) this.people_Obs = new ObservableCollection<Person>();
+            this.people_Obs.Add(new Person() { Name = "a", Age = updateObsCount });
+            this.people_Obs.Add(new Person() { Name = "b", Age = updateObsCount });
+            updateObsCount++;
         }
     }
 }
